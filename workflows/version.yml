@@ -1,0 +1,24 @@
+name: Test, Bump Package Version and Tag
+on:
+  workflow_call:
+    secrets:
+      GH_TOKEN:
+        required: true
+jobs:
+  bump_version:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      # Setup .npmrc file to publish to npm
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14.x'
+          token: ${{secrets.GH_TOKEN}}
+      - uses: actions/checkout@v2
+      - run:  |
+          npm ci
+          npm test
+          git config --global url."https://${{ secrets.GH_TOKEN }}@github.com".insteadOf ssh://git@github.com
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          npm version patch
