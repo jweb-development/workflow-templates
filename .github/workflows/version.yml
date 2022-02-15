@@ -16,8 +16,6 @@ jobs:
           token: ${{secrets.GH_TOKEN}}
       - uses: actions/checkout@v2
       - run:  |
-          npm ci
-          npm test
           git config --global url."https://${{ secrets.GH_TOKEN }}@github.com".insteadOf ssh://git@github.com
           git config --local user.name "github-actions[bot]"
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
